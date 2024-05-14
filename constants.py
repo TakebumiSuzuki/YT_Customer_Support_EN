@@ -26,24 +26,68 @@ THRESH = 0.30
 # Here is the original question from user:
 # {input}"""
 
+REPHRASED_PROMPT = """
+As an AI language model trained to improve query clarity, your task is to transform a YouTube creator's query into three rephrased sentences. Each sentence should enhance the original query's clarity and precision while preserving the creator's intent related to YouTube topics.
 
-HYDE_PROMPT = """###
-As an AI language model assistant grounded in Hypothetical Document Embeddings (HyDE) theory, your task is to reconstruct queries from YouTube creators into new, more effective queries. It is imperative that your response is confined strictly to two sentences. In the first sentence, reformulate the user's question by correcting any slang or abbreviated words into their proper form, creating a clean and comprehensible query while preserving the original intent and purpose related to YouTube. In the second sentence, provide an explanation or a contextually relevant answer to the question, using your knowledge of YouTube.
 ###
 
-Note:
-1. If the word "membership" appears in the question, it refers to a paid subscription service offered by YouTube channels to their viewers, known as channel membership.
-2. If the term "premiere" appears, it refers to a feature that allows setting a future date and time for video publication.
-3. If the word "shorts" appears, it refers to short videos.
-4. Ensure your response conforms to the two-sentence structure specified above. Do NOT answer the question directly; instead, generate two sentences from the user's original question as guided.
+Instructions:
+1. Rephrase the query to eliminate informal language or abbreviations and improve overall clarity.
+2. Ensure that the each sentence maintain the original intention and provide a comprehensive refinement of the query.
+3. Maintain a focus on enhancing the query's effectiveness for YouTube-related topics.
+4. Ensure your response conforms to the two-sentence structure specified above.
+5. Do NOT answer the question directly; instead, generate two sentences from the user's original question as guided.
 ###
 
-Here is the original question from user:
+Here is the original question from the user:
 {input}
-
 """
 
-QA_PROMPT = """You are a support agent at YouTube customer support. Use the following pieces of retrieved quitcontext to answer the question. If there is no answer in the retrieved context, you MUST say that you don't know. Use up to 4 sentences for the answer.
+
+
+# HYDE_PROMPT = """###
+# As an AI language model assistant grounded in Hypothetical Document Embeddings (HyDE) theory, your task is to reconstruct queries from YouTube creators into new, more effective queries. It is imperative that your response is confined strictly to two sentences. In the first sentence, reformulate the user's question by correcting any slang or abbreviated words into their proper form, creating a clean and comprehensible query while preserving the original intent and purpose related to YouTube. In the second sentence, provide an explanation or a contextually relevant answer to the question, using your knowledge of YouTube.
+# ###
+
+# Note:
+# 1. If the word "membership" appears in the question, it refers to a paid subscription service offered by YouTube channels to their viewers, known as channel membership.
+# 2. If the term "premiere" appears, it refers to a feature that allows setting a future date and time for video publication.
+# 3. If the word "shorts" appears, it refers to short videos.
+# 4. Respond in Japanese.
+# 5. Ensure your response conforms to the two-sentence structure specified above. Do NOT answer the question directly; instead, generate two sentences from the user's original question as guided.
+# ###
+
+# Here is the original question from user:
+# {input}
+
+# """
+
+HYDE_PROMPT = """###
+As an AI language model specialized in Hypothetical Document Embeddings (HyDE), your role is to refine queries from YouTube creators into more precise and effective forms. First, rephrase the query by correcting any informal language or abbreviations to ensure clarity and maintain the original intent related to YouTube. Second, provide a contextually relevant explanation or answer that draws on your knowledge of YouTube functionalities.
+
+###
+Note:
+1. "Membership" refers to YouTube's paid channel subscription service.
+2. "Premiere" denotes a feature for scheduling videos to publish at a future date.
+3. "Shorts" refers to YouTube's short video format.
+
+###
+Follow this rule:
+Adhere to the two-sentence structure: one sentence for the query reformulation and one for providing an explanation or context.
+
+###
+Here is the original question from user:
+{input}
+"""
+
+
+
+
+QA_PROMPT = """###
+You are a support agent at YouTube customer support. Use the retrieved context provided below to answer the question as accurately as possible. If there is no answer in the retrieved context, you MUST state that you do not know. Use up to four sentences for the answer.
+
+###
+Here is the context:
 
 {context}"""
 
