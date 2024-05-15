@@ -1,66 +1,67 @@
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+# __import__('pysqlite3')
+# import sys
+# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import constants as K
 import streamlit as st
 import conversation_logic as logic
-
-ss = st.session_state
-
+from PIL import Image
 st.set_page_config(
-     page_title = K.TAB_PAGE_TITLE,
-     page_icon = K.TAB_PAGE_ICON,
+     page_title = K.TAB_TITLE(K.lang),
+     page_icon = Image.open("./images/bear_icon_fabicon.jpeg"),
      layout = "wide",
      initial_sidebar_state = "expanded"
 )
 
-st.markdown("""
-    <style>
-        header {visibility: hidden;}
-        div[class^='block-container'] { padding-top: 2rem; }
-    </style>
-    """, unsafe_allow_html=True
-)
+ss = st.session_state
 
-st.title(K.TITLE)
-st.write(K.WRITE)
 if "store" not in ss:
     ss["store"] = []
 message_list = ss["store"]
 
+
+
+st.markdown(K.CSS, unsafe_allow_html=True)
+
+st.title(K.TITLE(K.lang))
+st.write(K.SUBTITLE(K.lang))
+
+def setAvatar(role):
+    if role == "AI": return "./images/bear_icon_avator.jpeg"
+    else: return None
+
 # Display chat messages from history on app rerun
 if message_list != []:
     for message in message_list:
-        with st.chat_message(message["role"]):
+        with st.chat_message(message["role"],avatar=setAvatar(message["role"])):
             st.markdown(message["content"])
+            # if message["role"] == "AI":
+            #     st.button('docs履歴')
 
     if "show_button" in ss and ss["show_button"] == True:
-        clear_history = st.button("clear")
-        if clear_history == True:
+        clear_button = st.button(K.CLEAR_BUTTON(K.lang))
+        if clear_button == True:
             ss["store"] = []
-            ss['retrived_text'] = ""
-            clear_history = False
+            ss["retrived_text"] = ""
+            clear_button = False
             st.rerun()
 
 def delete_button():
     ss["show_button"] = False
 
 # Accept user input
-if prompt := st.chat_input(K.HOLDER, on_submit=delete_button):
+if input := st.chat_input(K.INPUT_HOLDER(K.lang), on_submit = delete_button):
     # Display user message in chat message container
     with st.chat_message("user"):
-        st.markdown(prompt)
-    ss['retrived_text'] = logic.invoke(prompt, ss["store"], ss["mode"])
+        st.markdown(input)
+    ss["retrived_text"] = logic.invoke(input, ss["store"])
     ss["show_button"] = True
     st.rerun()
 
 with st.sidebar:
-    if "mode" not in ss:
-        ss["mode"] = "sim"
-    selected_mode = st.radio(label = "Choose model", options = ["sim", "mmr"], horizontal = True)
-    ss["mode"] = selected_mode
-    if 'retrived_text' in ss:
-        st.markdown(ss['retrived_text'])
+    st.subheader(K.SIDEBAR_SUBTITLE(K.lang))
+    if "retrived_text" in ss:
+        st.markdown(ss["retrived_text"])
+
 
 
